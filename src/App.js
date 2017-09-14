@@ -1,28 +1,37 @@
-import React, { Component } from 'react';
-import {render} from 'react-dom';
+import React from 'react';
+import KanbanBoard from './KanbanBoard.js';
 
-// Parent Component
-class GroceryList extends Component {
-  render() {
-    return (
-      <ul>
-        <ListItem quantity="1">Bread</ListItem>
-        <ListItem quantity="6">Eggs</ListItem>
-        <ListItem quantity="2">Milk</ListItem>
-      </ul>
-    );
+// hard coded data model
+let cardsList = [
+{
+  id: 1,
+  title: "Read the manual!!",
+  description: "I should read everything.",
+  status: "in-progress",
+  tasks: []
+},
+{
+  id: 2,
+  title: "Write some code.",
+  description: "practice, practice, practice!",
+  status: "to-do",
+  tasks: [
+    {
+      id: 1,
+      name: "create more react projects.",
+      done: true,
+    },
+    {
+      id: 2,
+      name: "kanban Board",
+      done: false
+    },
+    {id: 3,
+     name: "My education",
+     done: false
+   }
+   ]
   }
-}
+];
 
-// Child Component
-class ListItem extends Component {
-  render() {
-    return (
-      <li>
-        {this.props.quantity}× {this.props.children}
-      </li>
-    );
-  }
-}
-
-render(<GroceryList />, document.getElementById('root'));
+React.render(<KanbanBoard cards={cardList} />, document.getElementById('root'));
