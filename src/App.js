@@ -1,4 +1,5 @@
 import React from 'react';
+import { render } from 'react-dom';
 import KanbanBoard from './KanbanBoard.js';
 
 // hard coded data model
@@ -14,7 +15,7 @@ let cardsList = [
   id: 2,
   title: "Write some code.",
   description: "practice, practice, practice!",
-  status: "to-do",
+  status: "todo",
   tasks: [
     {
       id: 1,
@@ -34,4 +35,4 @@ let cardsList = [
   }
 ];
 
-React.render(<KanbanBoard cards={cardList} />, document.getElementById('root'));
+render(<KanbanBoard cards={cardsList} />, document.getElementById('root'));
