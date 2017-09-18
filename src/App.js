@@ -2,12 +2,14 @@ import React from 'react';
 import { render } from 'react-dom';
 import KanbanBoard from './KanbanBoard.js';
 
+
 // hard coded data model
 let cardsList = [
 {
   id: 1,
   title: "Read the manual!!",
-  description: "I should read everything.",
+  description: "I should read **everything**.",
+  color: '#BD8D31',
   status: "in-progress",
   tasks: []
 },
@@ -15,6 +17,7 @@ let cardsList = [
   id: 2,
   title: "Write some code.",
   description: "practice, practice, practice!",
+  color: '#3A7E28',
   status: "todo",
   tasks: [
     {
