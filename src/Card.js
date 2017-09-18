@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import CheckList from './CheckList.js';
 import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
 
+// Custom validator
+let titlePropType = (props, propName, componentName) => {
+  if (props[propName]) {
+    let value = props[propName];
+    if (typeof value !== 'string' || value.length > 80) {
+      return newError(
+        `${propName} in ${componentName} is longer than 80 characters`
+        );
+    }
+  }
+}
+
 class Card extends Component {
   constructor() {
     super(...arguments);
@@ -48,5 +60,13 @@ class Card extends Component {
     );
   }
 }
+
+Card.propTypes = {
+  id: PropTypes.number,
+  title: titlePropType,
+  description: PropTypes.string,
+  color: PropTypes.string,
+  tasks: PropTypes.arrayOf(PropTypes.object)
+};
 
 export default Card;
