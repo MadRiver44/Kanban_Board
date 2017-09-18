@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class CheckList extends Component {
   render() {
@@ -15,10 +15,15 @@ class CheckList extends Component {
         {/* uncontrolled component*/}
           <input type="text"
                  className="checkList--add-task"
-                 placeholder="Type then hit enter to add a task"/>
+                 placeholder="Type, then hit enter to add a task"/>
         </div>
       );
     }
   }
 
-  export default CheckList;
+CheckList.propTypes = {
+  cardId: PropTypes.number,
+  tasks: PropTypes.arrayOf(PropTypes.object)
+};
+
+export default CheckList;
