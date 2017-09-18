@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import CheckList from './CheckList.js';
 import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
 
