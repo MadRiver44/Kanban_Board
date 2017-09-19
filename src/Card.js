@@ -1,34 +1,36 @@
-import React, { Component, PropTypes } from 'react';
-import CheckList from './CheckList.js';
-import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import CheckList from './CheckList.js'
+import marked from 'marked' //library to render markdown https://github.com.chjj/marked
 
 // Custom validator
 let titlePropType = (props, propName, componentName) => {
   if (props[propName]) {
-    let value = props[propName];
+    let value = props[propName]
     if (typeof value !== 'string' || value.length > 80) {
-      return newError(
-        `${propName} in ${componentName} is longer than 80 characters`
-        );
+      return new Error(
+        `${propName} in ${componentName} is longer than 80 characters`,
+      )
     }
   }
 }
 
 class Card extends Component {
   constructor() {
-    super(...arguments);
-    this.state={
-      showDetails: false
-    };
-
+    super(...arguments)
+    this.state = {
+      showDetails: false,
+    }
   }
   toggleDetails() {
-    this.setState({showDetails: !this.state.showDetails});
+    this.setState({ showDetails: !this.state.showDetails })
   }
-// conditional render
+  // conditional render
   render() {
-    let cardDetails;
-  {/* inline style*/}
+    let cardDetails
+    {
+      /* inline style*/
+    }
     let sideColor = {
       position: 'absolute',
       zIndex: -1,
@@ -36,28 +38,40 @@ class Card extends Component {
       bottom: 0,
       left: 0,
       width: 7,
-      backgroundColor: this.props.color
-    };
+      backgroundColor: this.props.color,
+    }
 
     if (this.state.showDetails) {
       cardDetails = (
-          <div className="card_details">
-      {/* pass jsx expression into marked(), use dangerouslySetInnerHTML to render html in JSX*/}
-          <span dangerouslySetInnerHTML={{__html:marked(this.props.description)}}/>
-          <CheckList cardId={this.props.id} tasks={this.props.tasks} />
+        <div className="card_details">
+          {/* pass jsx expression into marked(), use dangerouslySetInnerHTML to render html in JSX*/}
+          <span
+            dangerouslySetInnerHTML={{ __html: marked(this.props.description) }}
+          />
+          <CheckList
+            cardId={this.props.id}
+            tasks={this.props.tasks}
+            taskCallbacks={this.props.taskCallbacks}
+          />
         </div>
-
-        );
-    };
+      )
+    }
     return (
       <div className="card">
-       <div style={sideColor} />
-        <div className={this.state.showDetails ? "card_title card_title--is-open" : "card_title"} onClick={this.toggleDetails.bind(this)}>
+        <div style={sideColor} />
+        <div
+          className={
+            this.state.showDetails
+              ? 'card_title card_title--is-open'
+              : 'card_title'
+          }
+          onClick={this.toggleDetails.bind(this)}
+        >
           {this.props.title}
-          </div>
+        </div>
         {cardDetails}
       </div>
-    );
+    )
   }
 }
 
@@ -66,7 +80,8 @@ Card.propTypes = {
   title: titlePropType,
   description: PropTypes.string,
   color: PropTypes.string,
-  tasks: PropTypes.arrayOf(PropTypes.object)
-};
+  tasks: PropTypes.arrayOf(PropTypes.object),
+  taskCallbacks: PropTypes.object,
+}
 
-export default Card;
+export default Card
