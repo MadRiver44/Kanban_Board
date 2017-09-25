@@ -127,4 +127,4 @@ Card.propTypes = {
   connectDragSource: PropTypes.func.isRequired
 };
 
-export default Card(constants.CARD, cardDragSpec, collectDrag)(Card);
+export default DragSource(constants.CARD, cardDragSpec, collectDrag)(Card);
