@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import KanbanBoard from './KanbanBoard.js';
+import { throttle } from './utils.js';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
 
@@ -15,6 +16,11 @@ class KanbanAppContainer extends Component {
       cards: [],
     };
   }
+  // only call updateCardStatus when arguments change
+  this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+  // call updateCardPosition at max every 500ms or when arguments change
+  this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
+
 
   componentDidMount() {
     fetch(API_URL + '/cards', { headers: API_HEADERS })
@@ -192,8 +198,8 @@ class KanbanAppContainer extends Component {
           add: this.addTask.bind(this),
         }}
         cardCallbacks={{
-          updateStatus: this.updateCardStatus.bind(this),
-          updatePosition: this.updateCardPosition.bind(this),
+          updateStatus: this.updateCardStatus,
+          updatePosition: this.updateCardPosition,
         }}
       />
     );
