@@ -176,7 +176,7 @@ class KanbanAppContainer extends Component {
       this.setState(
         update(this.state, {
           cards: {
-            $splice: [[cardINdex, 1], [afterIndex, 0, card]],
+            $splice: [[cardIndex, 1], [afterIndex, 0, card]],
           },
         }),
       );
