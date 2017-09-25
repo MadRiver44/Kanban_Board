@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import PropTypes from 'prop-types'
 import CheckList from './CheckList.js'
 import marked from 'marked' //library to render markdown https://github.com.chjj/marked
@@ -69,7 +70,13 @@ class Card extends Component {
         >
           {this.props.title}
         </div>
-        {cardDetails}
+        <ReactCSSTransitionGroup
+          transitionName="toggle"
+          transitionEnterTimeout={250}
+          transitionLeaveTimeout={250}
+        >
+          {cardDetails}
+        </ReactCSSTransitionGroup>
       </div>
     )
   }
