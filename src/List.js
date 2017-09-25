@@ -47,4 +47,4 @@ List.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
 };
 
-export default DropTarget(constants.Card, listTargetSpec, collect)(List);
+export default DropTarget(constants.CARD, listTargetSpec, collect)(List);
