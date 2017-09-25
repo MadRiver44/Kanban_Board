@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
 import CheckList from './CheckList.js';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import constants from './constants.js';
 import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
 
@@ -22,7 +22,7 @@ let titlePropType = (props, propName, componentName) => {
 
 //  -DropTarget Methods (All Optional)
 //  -drop: Called when a compatible item is dropped
-//  -hover: Called when an item is hoveered over the component
+//  -hover: Called when an item is hovered over the component
 //  -canDrop: Use it to specify wheter the drop target is able to accept the item
 
 //  -beginDrag (Required)
@@ -35,6 +35,13 @@ const cardDragSpec = {
     return {
       id: props.id,
     };
+  },
+};
+
+const cardDropSpec = {
+  hover(props, monitor) {
+    const draggedId = monitor.getItem().id;
+    props.cardCallbacks.updatePosition(draggedId, props.id);
   },
 };
 
@@ -51,6 +58,12 @@ let collectDrag = (connect, monitor) => {
   };
 };
 
+let collectDrop = (connect, monitor) => {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+};
+
 class Card extends Component {
   constructor() {
     super(...arguments);
@@ -63,7 +76,7 @@ class Card extends Component {
   }
   // conditional render
   render() {
-    const { connectDragSource } = this.props;
+    const { connectDragSource, connectDropTarget } = this.props;
     let cardDetails;
     {
       /* inline style*/
@@ -93,25 +106,27 @@ class Card extends Component {
         </div>
       );
     }
-    return connectDragSource(
-      <div className="card">
-        <div style={sideColor} />
-        <div
-          className={
-            this.state.showDetails
-              ? 'card_title card_title--is-open'
-              : 'card_title'
-          }
-          onClick={this.toggleDetails.bind(this)}>
-          {this.props.title}
-        </div>
-        <ReactCSSTransitionGroup
-          transitionName="toggle"
-          transitionEnterTimeout={250}
-          transitionLeaveTimeout={250}>
-          {cardDetails}
-        </ReactCSSTransitionGroup>
-      </div>
+    return connectDropTarget(
+      connectDragSource(
+        <div className="card">
+          <div style={sideColor} />
+          <div
+            className={
+              this.state.showDetails
+                ? 'card_title card_title--is-open'
+                : 'card_title'
+            }
+            onClick={this.toggleDetails.bind(this)}>
+            {this.props.title}
+          </div>
+          <ReactCSSTransitionGroup
+            transitionName="toggle"
+            transitionEnterTimeout={250}
+            transitionLeaveTimeout={250}>
+            {cardDetails}
+          </ReactCSSTransitionGroup>
+        </div>,
+      ),
     );
   }
 }
@@ -123,8 +138,20 @@ Card.propTypes = {
   color: PropTypes.string,
   tasks: PropTypes.arrayOf(PropTypes.object),
   taskCallbacks: PropTypes.object,
-  cardCallback: PropTypes.object
-  connectDragSource: PropTypes.func.isRequired
+  cardCallback: PropTypes.object,
+  connectDragSource: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
 };
 
-export default DragSource(constants.CARD, cardDragSpec, collectDrag)(Card);
+const dragHigherOrderCard = DragSource(
+  constants.CARD,
+  cardDragSpec,
+  collectDrag,
+)(Card);
+const dragDropHigherOrderCard = DropTarget(
+  constants.CARD,
+  cardDropSpec,
+  collectDrop,
+)(dragHigherOrderCard);
+
+export default dragDropHigherOrderCard;
