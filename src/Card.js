@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
 import CheckList from './CheckList.js';
-import { DragSource, DropTarget } from 'react-dnd';
+import {DragSource, DropTarget} from 'react-dnd';
 import constants from './constants.js';
 import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
 
@@ -11,9 +11,7 @@ let titlePropType = (props, propName, componentName) => {
   if (props[propName]) {
     let value = props[propName];
     if (typeof value !== 'string' || value.length > 80) {
-      return new Error(
-        `${propName} in ${componentName} is longer than 80 characters`,
-      );
+      return new Error(`${propName} in ${componentName} is longer than 80 characters`);
     }
   }
 };
@@ -34,7 +32,11 @@ const cardDragSpec = {
   beginDrag(props) {
     return {
       id: props.id,
+      status: props.status,
     };
+  },
+  endDrag(props) {
+    props.cardCallbacks.persistCardDrag(props.id, props.status);
   },
 };
 
@@ -72,11 +74,11 @@ class Card extends Component {
     };
   }
   toggleDetails() {
-    this.setState({ showDetails: !this.state.showDetails });
+    this.setState({showDetails: !this.state.showDetails});
   }
   // conditional render
   render() {
-    const { connectDragSource, connectDropTarget } = this.props;
+    const {connectDragSource, connectDropTarget} = this.props;
     let cardDetails;
     {
       /* inline style*/
@@ -95,9 +97,7 @@ class Card extends Component {
       cardDetails = (
         <div className="card_details">
           {/* pass jsx expression into marked(), use dangerouslySetInnerHTML to render html in JSX*/}
-          <span
-            dangerouslySetInnerHTML={{ __html: marked(this.props.description) }}
-          />
+          <span dangerouslySetInnerHTML={{__html: marked(this.props.description)}} />
           <CheckList
             cardId={this.props.id}
             tasks={this.props.tasks}
@@ -111,11 +111,7 @@ class Card extends Component {
         <div className="card">
           <div style={sideColor} />
           <div
-            className={
-              this.state.showDetails
-                ? 'card_title card_title--is-open'
-                : 'card_title'
-            }
+            className={this.state.showDetails ? 'card_title card_title--is-open' : 'card_title'}
             onClick={this.toggleDetails.bind(this)}>
             {this.props.title}
           </div>
@@ -143,15 +139,9 @@ Card.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
 };
 
-const dragHigherOrderCard = DragSource(
-  constants.CARD,
-  cardDragSpec,
-  collectDrag,
-)(Card);
-const dragDropHigherOrderCard = DropTarget(
-  constants.CARD,
-  cardDropSpec,
-  collectDrop,
-)(dragHigherOrderCard);
+let dragHigherOrderCard = DragSource(constants.CARD, cardDragSpec, collectDrag)(Card);
+let dragDropHigherOrderCard = DropTarget(constants.CARD, cardDropSpec, collectDrop)(
+  dragHigherOrderCard,
+);
 
 export default dragDropHigherOrderCard;
