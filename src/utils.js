@@ -18,13 +18,13 @@ export const throttle = (func, wait) => {
     }
     context = this;
     args = arguments;
-    argschanged = JSON.stringify(args !== JSON.stringify.prevArgs);
-    prevArgs = { ...args };
-    if (argschanged || (wait && (remaining <= 0 || remaining > wait))) {
+    argsChanged = JSON.stringify(args) !== JSON.stringify(prevArgs);
+    prevArgs = Object.assign({}, args);
+    if (argsChanged || (wait && (remaining <= 0 || remaining > wait))) {
       if (wait) {
         previous = now;
       }
-      result = func.apply(context.args);
+      result = func.apply(context, args);
       context = args = null;
     }
     return result;
