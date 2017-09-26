@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import KanbanBoard from './KanbanBoard.js';
-import { throttle } from './utils.js';
+import {throttle} from './utils.js';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
 
@@ -15,18 +15,17 @@ class KanbanAppContainer extends Component {
     this.state = {
       cards: [],
     };
+    // only call updateCardStatus when arguments change
+    this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+    // call updateCardPosition at max every 500ms or when arguments change
+    this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
   }
-  // only call updateCardStatus when arguments change
-  this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
-  // call updateCardPosition at max every 500ms or when arguments change
-  this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
-
 
   componentDidMount() {
-    fetch(API_URL + '/cards', { headers: API_HEADERS })
+    fetch(API_URL + '/cards', {headers: API_HEADERS})
       .then(response => response.json())
       .then(responseData => {
-        this.setState({ cards: responseData });
+        this.setState({cards: responseData});
       })
       .catch(error => {
         console.log('Error fetching and parsing data', error);
@@ -40,15 +39,15 @@ class KanbanAppContainer extends Component {
     // find the index of the card
     let cardIndex = this.state.cards.findIndex(card => card.id === cardId);
     // create a new task with the given name and a temporary id
-    let newTask = { id: Date.now(), name: taskName, done: false };
+    let newTask = {id: Date.now(), name: taskName, done: false};
     // create a new object and push the new task to the array of tasks
     let nextState = update(this.state.cards, {
       [cardIndex]: {
-        tasks: { $push: [newTask] },
+        tasks: {$push: [newTask]},
       },
     });
     // set the component state to the mutated object
-    this.setState({ cards: nextState });
+    this.setState({cards: nextState});
     // call the API to add the task on the server
     fetch(`${API_URL}/cards/${cardId}/tasks`, {
       method: 'post',
@@ -68,7 +67,7 @@ class KanbanAppContainer extends Component {
         // when server return the definitive id
         // used for the new task on the server, update it in React
         newTask.id = responseData.id;
-        this.setState({ cards: nextState });
+        this.setState({cards: nextState});
       })
       .catch(error => {
         this.setState(prevState);
@@ -83,11 +82,11 @@ class KanbanAppContainer extends Component {
     // create a new object without the task
     let nextState = update(this.state.cards, {
       [cardIndex]: {
-        tasks: { $splice: [[taskIndex, 1]] },
+        tasks: {$splice: [[taskIndex, 1]]},
       },
     });
     // set the component state to the mutated object
-    this.setState({ cards: nextState });
+    this.setState({cards: nextState});
     // call the api to remove the task on the server
     fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
       method: 'delete',
@@ -129,12 +128,12 @@ class KanbanAppContainer extends Component {
       },
     });
     // set the component state to the mutated object
-    this.setState({ cards: nextState });
+    this.setState({cards: nextState});
     // call API  to toggle task on server
     fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
       method: 'put',
       headers: API_HEADERS,
-      body: JSON.stringify({ done: newDoneValue }),
+      body: JSON.stringify({done: newDoneValue}),
     })
       .then(response => {
         if (!response.ok) {
@@ -161,7 +160,7 @@ class KanbanAppContainer extends Component {
         update(this.state, {
           cards: {
             [cardIndex]: {
-              status: { $set: listId },
+              status: {$set: listId},
             },
           },
         }),
@@ -188,6 +187,41 @@ class KanbanAppContainer extends Component {
       );
     }
   }
+
+  persistCardDrag(cardId, status) {
+    // find the index of the card
+    let cardIndex = this.state.cards.findIndex(card => card.id === cardId);
+    // get current card
+    let card = this.state.cards[cardIndex];
+
+    fetch(`${API_URL}/cards/${cardId}`, {
+      method: 'put',
+      headers: API_HEADERS,
+      body: JSON.stringify({
+        status: card.status,
+        row_order_position: cardIndex,
+      }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          // throw an error and rollback optimistic changes to the UI
+          throw new Error("Server response wasn't OK");
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error', error);
+        this.setState(
+          update(this.state, {
+            cards: {
+              [cardIndex]: {
+                status: {$set: status},
+              },
+            },
+          }),
+        );
+      });
+  }
+
   render() {
     return (
       <KanbanBoard
@@ -200,6 +234,7 @@ class KanbanAppContainer extends Component {
         cardCallbacks={{
           updateStatus: this.updateCardStatus,
           updatePosition: this.updateCardPosition,
+          persistCardDrag: this.persistCardDrag.bind(this),
         }}
       />
     );
