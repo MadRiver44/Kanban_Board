@@ -19,7 +19,7 @@ class NewCard extends Component {
   }
 
   handleSubmit(event) {
-    e.preventDefault();
+    event.preventDefault();
     this.props.cardCallbacks.addCard(this.state);
     this.props.history.pushState(null, '/');
   }
