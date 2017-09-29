@@ -1,6 +1,11 @@
-import React from 'react'
-import { render } from 'react-dom'
-import KanbanAppContainer from './KanbanAppContainer.js'
+import React from 'react';
+import {render} from 'react-dom';
+import {Router, Route} from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+import KanbanAppContainer from './KanbanAppContainer.js';
+import KanbanBoard from './KanbanBoard.js';
+import EditCard from './EditCard.js';
+import NewCard from './NewCard.js';
 
 // hard coded data model
 /*
@@ -40,4 +45,14 @@ let cardsList = [
 ]
 */
 
-render(<KanbanAppContainer />, document.getElementById('root'))
+render(
+  <Router history={createBrowserHistory()}>
+    <Route component={KanbanAppContainer}>
+      <Route path="/" component={KanbanBoard}>
+        <Route path="new" component={NewCard} />
+        <Route path="edit/:card_id" component={EditCard} />
+      </Route>
+    </Route>
+  </Router>,
+  document.getElementById('root'),
+);
