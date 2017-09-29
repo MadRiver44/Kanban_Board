@@ -24,12 +24,14 @@ class CardForm extends Component {
               required={true}
               autoFocus={true}
             />
+            <br />
             <textarea
               value={this.props.draftCard.description}
               onChange={this.handleChange.bind(this, 'description')}
               placeholder="Description"
               required={true}
             />
+            <br />
             <label htmlFor="status">Status</label>
             <select
               id="status"
@@ -46,7 +48,6 @@ class CardForm extends Component {
               id="color"
               value={this.props.draftCard.color}
               onChange={this.handleChange.bind(this, 'color')}
-              defaultValue="#ff0000"
             />
             <div className="actions">
               <button type="submit">{this.props.buttonLabel}</button>
@@ -71,3 +72,5 @@ CardForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
+
+export default CardForm;
