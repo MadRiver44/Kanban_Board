@@ -98,5 +98,91 @@ const cards = (state = [], action) => {
         });
       }
       return state;
+
+    // TASK CREATION
+    case REQUEST_CREATE_TASK:
+      cardIndex = getCardIndex(state, action.cardId);
+      return update(state, {
+        [cardIndex]: {
+          tasks: { $push: [action.task] },
+        },
+      });
+
+    case RECEIVE_CREATE_TASK:
+      cardIndex = getCardIndex(state, action.cardId);
+      taskIndex = state[cardIndex].tasks.findIndex(task => task.id === action.temporaryTaskId);
+
+      if (action.success) {
+        // update temp id
+        return update(state, {
+          [cardIndex]: {
+            tasks: {
+              [taskIndex]: {
+                id: { $set: action.task.id },
+              },
+            },
+          },
+        });
+      } else {
+        // remove task
+        return update(state, {
+          [cardIndex]: {
+            tasks: {
+              $splice: [[taskIndex, 1]],
+            },
+          },
+        });
+      }
+
+    // TASK DELETION
+    case REQUEST_DELETE_TASK:
+      cardIndex = getCardIndex(state, action.cardId);
+      return update(state, {
+        [cardIndex]: {
+          tasks: { $splice: [[action.taskIndex, 1]] },
+        },
+      });
+
+    case RECEIVE_DELETE_TASK:
+      if (!action.success) {
+        cardIndex = getCardIndex(state, action.cardId);
+        return update(state, {
+          [cardIndex]: {
+            tasks: {
+              $splice: [[action.taskIndex, 0, action.task]],
+            },
+          },
+        });
+      }
+      return state;
+
+    // TASK TOGGLING
+    case REQUEST_TOGGLE_TASK:
+      cardIndex = getCardIndex(state, action.cardId);
+      return update(state, {
+        [cardIndex]: {
+          tasks: {
+            [action.taskIndex]: { done: { $apply: done => !done } },
+          },
+        },
+      });
+
+    case RECEIVE_TOGGLE_TASK:
+      if (!action.success) {
+        cardIndex = getCardIndex(state, action.cardId);
+        return update(state, {
+          [cardIndex]: {
+            tasks: {
+              [action.taskIndex]: { done: { $apply: done => !done } },
+            },
+          },
+        });
+      }
+    default:
+      return state;
   }
 };
+
+export default cards;
+export const getCard = (state, id) => state.find(card => card.id === id);
+export const getCardIndex = (state, id) => state.findIndex(card => card.id === id);
