@@ -39,7 +39,7 @@ let CardActionCreators = {
       KanbanAPI.addCard(card).then(
         receivedNewCard =>
           dispatch({ type: RECEIVE_CREATE_CARD, success: true, card: recievedNewCard }),
-        error => dispatch({ type: RECEIVE_CREATE_CARD, success: false, error }),
+        error => dispatch({ type: RECEIVE_CREATE_CARD, success: false, card, error }),
       );
     };
   },
