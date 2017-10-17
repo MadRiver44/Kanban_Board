@@ -48,11 +48,11 @@ let CardActionCreators = {
     return dispatch => {
       dispatch({ type: REQUEST_UPDATE_CARD, card: cardDraft });
       KanbanAPI.updateCard(card, cardDraft).then(
-      receivedUpdatedCard =>
-        dispatch({ type: RECEIVE_UPDATE_CARD, success: true, card: receivedUpdatedCard }),
+        receivedUpdatedCard =>
+          dispatch({ type: RECEIVE_UPDATE_CARD, success: true, card: receivedUpdatedCard }),
         error => dispatch({ type: RECEIVE_UPDATE_CARD, succcess: false, card, error }),
-     );
-    }
+      );
+    };
   },
 
   _updateCardStatus: throttle((dispatch, cardId, listId) => {
@@ -60,7 +60,7 @@ let CardActionCreators = {
   }),
 
   updateCardStatus(cardId, listId) {
-    return (dispatch) => this._updateCardStatus(dispatch, cardId, listId);
+    return dispatch => this._updateCardStatus(dispatch, cardId, listId);
   },
 
   _updateCardPosition: throttle((dispatch, cardId, afterId) => {
@@ -68,33 +68,33 @@ let CardActionCreators = {
   }, 500),
 
   updateCardPosition(cardId, afterId) {
-    return (dispatch) => this._updateCardPosition(dispatch, cardId, afterId);
+    return dispatch => this._updateCardPosition(dispatch, cardId, afterId);
   },
 
   persistCardDrag(cardProps) {
-    return(dispatch, getState) => {
+    return (dispatch, getState) => {
       const state = getState();
       const card = getCard(state, cardProps.id);
       const cardIndex = getCardIndex(state, cardProps.id);
       dispatch({ type: REQUEST_PERSIST_CARD_DRAG });
       KanbanAPI.persistCardDrag(card.id, card.status, cardIndex).then(
         () => dispatch({ type: RECEIVE_PERSIST_CARD_DRAG, success: true, cardProps }),
-        (error) => dispatch({ type: RECEIVE_PERSIST_CARD_DRAG, success: false, cardProps, error })
-        )
-    }
+        error => dispatch({ type: RECEIVE_PERSIST_CARD_DRAG, success: false, cardProps, error }),
+      );
+    };
   },
 
   toggleCardDetails(cardId) {
-    return {type: TOGGLE_CARD_DETAILS, cardId};
+    return { type: TOGGLE_CARD_DETAILS, cardId };
   },
 
   createDraft(card) {
-    return {type: CREATE_DRAFT, card};
+    return { type: CREATE_DRAFT, card };
   },
 
   updateDraft(field, value) {
-    return {type: UPDATE_DRAFT, field, value};
-  }
-
+    return { type: UPDATE_DRAFT, field, value };
+  },
+};
 
 export default CardActionCreators;

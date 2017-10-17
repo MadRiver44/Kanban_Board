@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class CardForm extends Component {
@@ -59,7 +59,7 @@ class CardForm extends Component {
     );
   }
 }
-
+/*
 CardForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
   draftCard: PropTypes.shape({
@@ -72,5 +72,5 @@ CardForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
-
+*/
 export default CardForm;

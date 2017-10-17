@@ -5,7 +5,7 @@ var webpack = require('webpack');
  */
 var config = {
   devtool: 'eval-source-map',
-  entry: __dirname + '/src/App.js',
+  entry: __dirname + '/App.js',
   output: {
     path: __dirname + '/public',
     filename: 'bundle.js',
@@ -37,9 +37,9 @@ if (process.env.NODE_ENV === 'production') {
   config.devtool = false;
   config.plugins = [
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({comments: false}),
+    new webpack.optimize.UglifyJsPlugin({ comments: false }),
     new webpack.DefinePlugin({
-      'process.env': {NODE_ENV: JSON.stringify('production')},
+      'process.env': { NODE_ENV: JSON.stringify('production') },
     }),
   ];
 }

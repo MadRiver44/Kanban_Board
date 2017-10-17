@@ -46,8 +46,8 @@ const cardDragSpec = {
 const cardDropSpec = {
   hover(props, monitor) {
     const draggedId = monitor.getItem().id;
-    if (props.id !== dragedId) {
-      props.updatePosition(draggedId, props.id);
+    if (props.id !== draggedId) {
+      props.updateCardPosition(draggedId, props.id);
     }
   },
 };
@@ -123,7 +123,7 @@ class Card extends Component {
     );
   }
 }
-
+/*
 Card.propTypes = {
   id: PropTypes.number,
   title: titlePropType,
@@ -136,7 +136,7 @@ Card.propTypes = {
   updateCardPosition: PropTypes.func.isRequired,
   toggleCardDetails: PropTypes.func.isRequired,
 };
-
+*/
 const dragHigherOrderCard = DragSource(CARD, cardDragSpec, collectDrag)(Card);
 const dragDropHigherOrderCard = DropTarget(CARD, cardDropSpec, collectDrop)(dragHigherOrderCard);
 

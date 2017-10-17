@@ -41,7 +41,7 @@ class CheckList extends Component {
     );
   }
 }
-
+/*
 CheckList.propTypes = {
   cardId: PropTypes.number,
   tasks: PropTypes.array(PropTypes.object),
@@ -49,7 +49,7 @@ CheckList.propTypes = {
   toggleTask: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
 };
-
+*/
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
@@ -60,4 +60,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(TaskActionCreators.deleteTask(cardId, task, taskIndex)),
 });
 
-export default cinnect(mapStateToProps, mapDispatchToProps)(CheckList);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckList);
