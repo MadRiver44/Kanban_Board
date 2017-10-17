@@ -1,26 +1,21 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CardForm from './CardForm.js';
+import CardForm from './CardForm';
+import CardActionCreators from '../actions/CardActionCreators';
 
 class NewCard extends Component {
-  componentWillMount() {
-    this.setState({
-      id: Date.now(),
-      title: '',
-      description: '',
-      status: 'todo',
-      color: '#c9c9c9',
-      tasks: [],
-    });
+  componentDidMount() {
+    this.props.createDraft();
   }
 
   handleChange(field, value) {
-    this.setState({[field]: value});
+    this.props.updateDraft(field, value);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.cardCallbacks.addCard(this.state);
+    this.props.addCard(this.props.draft);
     this.props.history.pushState(null, '/');
   }
 
@@ -31,7 +26,7 @@ class NewCard extends Component {
   render() {
     return (
       <CardForm
-        draftCard={this.state}
+        draftCard={this.props.draft}
         buttonLabel="Create Card"
         handleChange={this.handleChange.bind(this)}
         handleSubmit={this.handleSubmit.bind(this)}
@@ -42,7 +37,20 @@ class NewCard extends Component {
 }
 
 NewCard.propTypes = {
-  cardCallbacks: PropTypes.object,
+  draft: PropTypes.object,
+  createDraft: PropTypes.func.isRequired,
+  updateDraft: PropTypes.func.isRequired,
+  addCard: PropTypes.func.isRequired,
 };
 
-export default NewCard;
+const mapStateToProps = state => ({
+  draft: state.cardDraft,
+});
+
+const mapDispatchToProps = dispatch => ({
+  createDraft: () => dispatch(CardActionCreators.createDraft()),
+  updateDraft: (field, value) => dispatch(CardActionCreators.updateDraft(field, value)),
+  addCard: draft => dispatch(CardActionCreators.addCard(draft)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewCard);

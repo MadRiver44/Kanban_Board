@@ -5,16 +5,14 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import List from './List.js';
 import { Link } from 'react-router';
+import CardActionCreators from '../actions/CardActionCreators';
 
 class KanbanBoard extends Component {
-  render() {
-    let cardModal =
-      this.props.children &&
-      React.cloneElement(this.props.children, {
-        cards: this.props.cards,
-        cardCallbacks: this.props.cardCallbacks,
-      });
+  componentDidMount() {
+    this.props.fetchCards();
+  }
 
+  render() {
     return (
       <div className="app">
         <Link to="/new" className="float-button">
@@ -23,25 +21,19 @@ class KanbanBoard extends Component {
         <List
           id="todo"
           title="To Do"
-          taskCallbacks={this.props.taskCallbacks}
-          cardCallbacks={this.props.cardCallbacks}
           cards={this.props.cards.filter(card => card.status === 'todo')}
         />
         <List
           id="in-progress"
           title="In Progress"
-          taskCallbacks={this.props.taskCallbacks}
-          cardCallbacks={this.props.cardCallbacks}
           cards={this.props.cards.filter(card => card.status === 'in-progress')}
         />
         <List
           id="done"
           title="Done"
-          taskCallbacks={this.props.taskCallbacks}
-          cardCallbacks={this.props.cardCallbacks}
           cards={this.props.cards.filter(card => card.status === 'done')}
         />
-        {cardModal}
+        {this.props.children}
       </div>
     );
   }
@@ -49,8 +41,11 @@ class KanbanBoard extends Component {
 
 KanbanBoard.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
-  taskCallbacks: PropTypes.object,
-  cardCallbacks: PropTypes.object,
 };
 
-export default DragDropContext(HTML5Backend)(KanbanBoard);
+const KanbanWithDragDop = DragDropContext(HTML5Backend)(KanbanBoard);
+const mapStateToProps = state => ({ cards: state.cards });
+const mapDispatchToProps = dispatch => ({
+  fetchCards: () => dispatch(CardActionCreators.fetchCards()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(KanbanWithDragDop);
