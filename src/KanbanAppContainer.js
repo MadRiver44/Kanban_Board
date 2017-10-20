@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import KanbanBoard from './KanbanBoard.js';
-import {throttle} from './utils.js';
+import { throttle } from './utils.js';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
 
@@ -22,10 +22,10 @@ class KanbanAppContainer extends Component {
   }
 
   componentDidMount() {
-    fetch(API_URL + '/cards', {headers: API_HEADERS})
+    fetch(API_URL + '/cards', { headers: API_HEADERS })
       .then(response => response.json())
       .then(responseData => {
-        this.setState({cards: responseData});
+        this.setState({ cards: responseData });
       })
       .catch(error => {
         console.log('Error fetching and parsing data', error);
@@ -39,15 +39,15 @@ class KanbanAppContainer extends Component {
     // find the index of the card
     let cardIndex = this.state.cards.findIndex(card => card.id === cardId);
     // create a new task with the given name and a temporary id
-    let newTask = {id: Date.now(), name: taskName, done: false};
+    let newTask = { id: Date.now(), name: taskName, done: false };
     // create a new object and push the new task to the array of tasks
     let nextState = update(this.state.cards, {
       [cardIndex]: {
-        tasks: {$push: [newTask]},
+        tasks: { $push: [newTask] },
       },
     });
     // set the component state to the mutated object
-    this.setState({cards: nextState});
+    this.setState({ cards: nextState });
     // call the API to add the task on the server
     fetch(`${API_URL}/cards/${cardId}/tasks`, {
       method: 'post',
@@ -67,7 +67,7 @@ class KanbanAppContainer extends Component {
         // when server return the definitive id
         // used for the new task on the server, update it in React
         newTask.id = responseData.id;
-        this.setState({cards: nextState});
+        this.setState({ cards: nextState });
       })
       .catch(error => {
         this.setState(prevState);
@@ -82,11 +82,11 @@ class KanbanAppContainer extends Component {
     // create a new object without the task
     let nextState = update(this.state.cards, {
       [cardIndex]: {
-        tasks: {$splice: [[taskIndex, 1]]},
+        tasks: { $splice: [[taskIndex, 1]] },
       },
     });
     // set the component state to the mutated object
-    this.setState({cards: nextState});
+    this.setState({ cards: nextState });
     // call the api to remove the task on the server
     fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
       method: 'delete',
@@ -128,12 +128,12 @@ class KanbanAppContainer extends Component {
       },
     });
     // set the component state to the mutated object
-    this.setState({cards: nextState});
+    this.setState({ cards: nextState });
     // call API  to toggle task on server
     fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
       method: 'put',
       headers: API_HEADERS,
-      body: JSON.stringify({done: newDoneValue}),
+      body: JSON.stringify({ done: newDoneValue }),
     })
       .then(response => {
         if (!response.ok) {
@@ -160,7 +160,7 @@ class KanbanAppContainer extends Component {
         update(this.state, {
           cards: {
             [cardIndex]: {
-              status: {$set: listId},
+              status: { $set: listId },
             },
           },
         }),
@@ -214,7 +214,7 @@ class KanbanAppContainer extends Component {
           update(this.state, {
             cards: {
               [cardIndex]: {
-                status: {$set: status},
+                status: { $set: status },
               },
             },
           }),
@@ -229,14 +229,14 @@ class KanbanAppContainer extends Component {
 
     // Add a temporary ID to the card
     if (card.id === null) {
-      let card = Object.assign({}, card, {id: Date.now()});
+      let card = Object.assign({}, card, { id: Date.now() });
     }
 
     // Create a new object and push the new card to the array of cards
-    let nextState = update(this.state.cards, {$push: [card]});
+    let nextState = update(this.state.cards, { $push: [card] });
 
     // set the component state to the mutated object
-    this.setState({cards: nextState});
+    this.setState({ cards: nextState });
 
     // Call the API to add the card on the server
     fetch(`${API_URL}/cards`, {
@@ -258,7 +258,7 @@ class KanbanAppContainer extends Component {
         // When the server returns the definitive ID
         // used for the new Card on the server, update it on React
         card.id = responseData.id;
-        this.setState({cards: nextState});
+        this.setState({ cards: nextState });
       })
       .catch(error => {
         this.setState(prevState);
@@ -271,9 +271,9 @@ class KanbanAppContainer extends Component {
     // find the index of the card
     let cardIndex = this.state.cards.findIndex(c => c.id === card.id);
     // using the $set command, we change the whole card
-    let nextState = update(this.state.cards, {[cardIndex]: {$set: card}});
+    let nextState = update(this.state.cards, { [cardIndex]: { $set: card } });
     // set component state to mutated object
-    this.setState({cards: nextState});
+    this.setState({ cards: nextState });
     // call the Api and update the card on the server
     fetch(`${API_URL}/cards/${card.id}`, {
       method: 'put',

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class CardForm extends Component {
@@ -44,9 +44,9 @@ class CardForm extends Component {
             <br />
             <label htmlFor="color">Color</label>
             <input
-              type="color"
               id="color"
               value={this.props.draftCard.color}
+              type="color"
               onChange={this.handleChange.bind(this, 'color')}
             />
             <div className="actions">

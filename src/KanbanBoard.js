@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {DragDropContext} from 'react-dnd';
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import List from './List.js';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 class KanbanBoard extends Component {
   render() {
@@ -22,23 +22,23 @@ class KanbanBoard extends Component {
         <List
           id="todo"
           title="To Do"
+          cards={this.props.cards.filter(card => card.status === 'todo')}
           taskCallbacks={this.props.taskCallbacks}
           cardCallbacks={this.props.cardCallbacks}
-          cards={this.props.cards.filter(card => card.status === 'todo')}
         />
         <List
           id="in-progress"
           title="In Progress"
+          cards={this.props.cards.filter(card => card.status === 'in-progress')}
           taskCallbacks={this.props.taskCallbacks}
           cardCallbacks={this.props.cardCallbacks}
-          cards={this.props.cards.filter(card => card.status === 'in-progress')}
         />
         <List
           id="done"
           title="Done"
+          cards={this.props.cards.filter(card => card.status === 'done')}
           taskCallbacks={this.props.taskCallbacks}
           cardCallbacks={this.props.cardCallbacks}
-          cards={this.props.cards.filter(card => card.status === 'done')}
         />
         {cardModal}
       </div>
