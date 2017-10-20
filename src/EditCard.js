@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CardForm from './CardForm.js';
 
@@ -9,12 +9,12 @@ class EditCard extends Component {
   }
 
   handleChange(field, value) {
-    this.setState({[field]: value});
+    this.setState({ [field]: value });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.cardCallbacks.update(this.state);
+    this.props.cardCallbacks.updateCard(this.state);
     this.props.history.pushState(null, '/');
   }
 
