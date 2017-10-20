@@ -74,6 +74,7 @@ class Card extends Component {
       showDetails: false,
     };
   }
+
   toggleDetails() {
     this.setState({ showDetails: !this.state.showDetails });
   }

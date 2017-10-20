@@ -9,6 +9,7 @@ const API_HEADERS = {
   'Content-Type': 'application/json',
   Authorization: 'blah,blah,blah',
 };
+
 class KanbanAppContainer extends Component {
   constructor() {
     super(...arguments);

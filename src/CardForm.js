@@ -7,7 +7,7 @@ class CardForm extends Component {
   }
 
   handleClose(event) {
-    event.prevent.default();
+    event.preventDefault();
     this.props.handleClose();
   }
 

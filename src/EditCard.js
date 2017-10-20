@@ -27,7 +27,7 @@ class EditCard extends Component {
       <CardForm
         draftCard={this.state}
         buttonLabel="Edit Card"
-        handleCahnge={this.handleChange.bind(this)}
+        handleChange={this.handleChange.bind(this)}
         handleSubmit={this.handleSubmit.bind(this)}
         handleClose={this.handleClose.bind(this)}
       />
