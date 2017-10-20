@@ -7,7 +7,7 @@ const defaultDraftCard = () => {
     title: '',
     description: '',
     status: 'todo',
-    color: 'c9c9c9',
+    color: '#c9c9c9',
     tasks: [],
   };
 };

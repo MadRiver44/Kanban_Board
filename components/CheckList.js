@@ -41,21 +41,21 @@ class CheckList extends Component {
     );
   }
 }
-/*
+
 CheckList.propTypes = {
   cardId: PropTypes.number,
-  tasks: PropTypes.array(PropTypes.object),
+  //tasks: PropTypes.array(PropTypes.object),
   addTask: PropTypes.func.isRequired,
   toggleTask: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
 };
-*/
+
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
   addTask: (cardId, newTask) => dispatch(TaskActionCreators.addTask(cardId, newTask)),
   toggleTask: (cardId, task, taskIndex) =>
-    dispatch(TaskActionCreators.toggleTask(cardId, task, newTask)),
+    dispatch(TaskActionCreators.toggleTask(cardId, task, taskIndex)),
   deleteTask: (cardId, task, taskIndex) =>
     dispatch(TaskActionCreators.deleteTask(cardId, task, taskIndex)),
 });

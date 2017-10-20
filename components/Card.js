@@ -10,6 +10,7 @@ import { Link } from 'react-router';
 import CardActionCreators from '../actions/CardActionCreators';
 
 // Custom validator
+/*
 let titlePropType = (props, propName, componentName) => {
   if (props[propName]) {
     let value = props[propName];
@@ -18,7 +19,7 @@ let titlePropType = (props, propName, componentName) => {
     }
   }
 };
-
+*/
 // Drag and Drop Spec ---  "A plain object implementing the drop target spec"
 
 //  -DropTarget Methods (All Optional)
@@ -105,6 +106,9 @@ class Card extends Component {
       connectDragSource(
         <div className="card">
           <div style={sideColor} />
+          <div className="card_edit">
+            <Link to={'/edit/' + this.props.id}>&#9998;</Link>
+          </div>
           <div
             className={
               this.props.showDetails !== false ? 'card_title card_title--is-open' : 'card_title'
@@ -123,10 +127,10 @@ class Card extends Component {
     );
   }
 }
-/*
+
 Card.propTypes = {
   id: PropTypes.number,
-  title: titlePropType,
+  //title: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
   tasks: PropTypes.arrayOf(PropTypes.object),
@@ -136,7 +140,7 @@ Card.propTypes = {
   updateCardPosition: PropTypes.func.isRequired,
   toggleCardDetails: PropTypes.func.isRequired,
 };
-*/
+
 const dragHigherOrderCard = DragSource(CARD, cardDragSpec, collectDrag)(Card);
 const dragDropHigherOrderCard = DropTarget(CARD, cardDropSpec, collectDrop)(dragHigherOrderCard);
 
