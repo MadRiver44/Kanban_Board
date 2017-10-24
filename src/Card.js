@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
-import CheckList from './CheckList.js';
-import { DragSource, DropTarget } from 'react-dnd';
-import constants from './constants.js';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import marked from 'marked'; //library to render markdown https://github.com.chjj/marked
+import { DragSource, DropTarget } from 'react-dnd';
+import constants from './constants';
+import CheckList from './CheckList';
 import { Link } from 'react-router';
 
 // Custom validator
