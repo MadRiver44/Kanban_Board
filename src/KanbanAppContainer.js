@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import KanbanBoard from './KanbanBoard.js';
-import { throttle } from './utils.js';
-import 'whatwg-fetch';
 import update from 'react-addons-update';
+import { throttle } from './utils.js';
+import KanbanBoard from './KanbanBoard.js';
+import 'whatwg-fetch';
 
 const API_URL = 'http://kanbanapi.pro-react.com';
 const API_HEADERS = {
