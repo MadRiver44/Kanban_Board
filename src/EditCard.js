@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CardForm from './CardForm.js';
+import CardForm from './CardForm';
 
 class EditCard extends Component {
   componentWillMount() {
-    let card = this.props.cards.find(card => card.id === this.props.params.card_id);
+    let card = this.props.cards.find(card => card.id == this.props.params.card_id);
     this.setState(Object.assign({}, card));
   }
 
@@ -12,13 +12,13 @@ class EditCard extends Component {
     this.setState({ [field]: value });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit(e) {
+    e.preventDefault();
     this.props.cardCallbacks.updateCard(this.state);
     this.props.history.pushState(null, '/');
   }
 
-  handleClose(event) {
+  handleClose(e) {
     this.props.history.pushState(null, '/');
   }
 
