@@ -1,6 +1,9 @@
 {
   "name": "kanban-react-router-flux-perf",
   "version": "0.1.4",
+  "engines": {
+    "node": "8.9.3"
+  },
   "description": "Kanban Board app in React",
   "author": "Kevin Turney",
   "license": "ISC",
