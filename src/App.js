@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route } from 'react-router';
-import { Provider } from 'react-redux';
+//import { Provider } from 'react-redux';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import KanbanAppContainer from './KanbanAppContainer';
 import KanbanBoard from './KanbanBoard.js';
